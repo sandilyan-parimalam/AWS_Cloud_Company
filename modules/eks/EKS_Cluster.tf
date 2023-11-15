@@ -1,3 +1,7 @@
+variable "dev_web_eks_cluster_name" {
+  module.vpc.dev_web_eks_cluster_name
+}
+
 resource "aws_eks_cluster" "dev_web_eks_cluster" {
   name = var.dev_web_eks_cluster
 
