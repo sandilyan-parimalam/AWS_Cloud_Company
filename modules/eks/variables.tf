@@ -1,8 +1,3 @@
-variable "my_current_region" {
-  type    = string
-  default = output.aws_region_name
-}
-
 variable "dev_web_eks_iam_role" {
   default = "dev_web_eks_iam_role"
 }
