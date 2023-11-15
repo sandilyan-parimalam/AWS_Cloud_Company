@@ -1,7 +1,3 @@
-output "aws_region_name" {
-  value = data.aws_region.my_region.name
-}
-
 module "vpc" {
   source = "./modules/vpc"
 }
@@ -11,5 +7,5 @@ module "budget" {
 }
 module "eks" {
   source = "./modules/eks"
-  my_current_region  = output.aws_region_name
+  region = var.region
 }

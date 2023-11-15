@@ -10,7 +10,7 @@ terraform {
   }
   backend "s3" {
     bucket = "terraformstatefilestore"
-    key = "terraform.tfstate"
+    key    = "terraform.tfstate"
     region = "us-east-1"
   }
 
@@ -23,6 +23,3 @@ provider "aws" {
 provider "kubernetes" {
   config_path = "~/.kube/config"
 }
-
-data "aws_region" "my_region" {}
-

@@ -3,8 +3,6 @@ resource "aws_eks_cluster" "dev_web_eks_cluster" {
 
   vpc_config {
     subnet_ids = [
-#      aws_subnet.dev_web_subnet.id,
-#      aws_subnet.dev_web_subnet_1.id,
       module.vpc.dev_web_subnet_id,
       module.vpc.dev_web_subnet_1_id,
     ]
@@ -14,6 +12,6 @@ resource "aws_eks_cluster" "dev_web_eks_cluster" {
     aws_iam_role.dev_web_eks_iam_role,
   ]
   provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region ${var.my_current_region}"
+    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region ${var.region}"
   }
 }
