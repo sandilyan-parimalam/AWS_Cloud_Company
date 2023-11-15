@@ -11,7 +11,7 @@ terraform {
   backend "s3" {
     bucket = "terraformstatefilestore"
     key = "terraform.tfstate"
-    region = var.region
+    region = "us-east-1"
   }
 
 }
