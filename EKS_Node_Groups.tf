@@ -48,3 +48,4 @@ resource "null_resource" "wait_for_lb_ip" {
       wait_for_lb_ip.sh
     EOT
   }
+}
