@@ -32,3 +32,24 @@ variable "dev_web_eks_cluster" {
 variable "dev_web_eks_node_group" {
   default = "dev_web_eks_node_group"
 }
+
+
+
+variable "web_server_instance_ami" {
+  default = "ami-05c13eab67c5d8861"
+}
+
+variable "web_server_instance_type" {
+  default = "t2.micro"
+}
+
+
+variable "web_server_instance_key_name" {
+  default = "dev_web_keypair"
+}
+
+variable "web_server_instance_tags" {
+  default = {
+    Name = "DLW01"
+  }
+}
