@@ -8,8 +8,8 @@ resource "aws_eks_node_group" "dev_web_eks_node_group" {
 
 
   subnet_ids = [
-    aws_subnet.dev_web_subnet.id,
-    aws_subnet.dev_web_subnet_1.id,
+    module.vpc.dev_web_subnet_id,
+    module.vpc.dev_web_subnet_1_id,
   ]
 
 
