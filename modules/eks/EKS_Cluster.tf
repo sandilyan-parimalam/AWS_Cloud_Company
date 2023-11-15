@@ -1,7 +1,3 @@
-variable "dev_web_eks_cluster_name" {
-  module.vpc.dev_web_eks_cluster_name
-}
-
 resource "aws_eks_cluster" "dev_web_eks_cluster" {
   name = var.dev_web_eks_cluster
 
@@ -18,6 +14,6 @@ resource "aws_eks_cluster" "dev_web_eks_cluster" {
     aws_iam_role.dev_web_eks_iam_role,
   ]
   provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region ${var.dev_web_eks_cluster_name}"
+    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region ${var.current_region}"
   }
 }
