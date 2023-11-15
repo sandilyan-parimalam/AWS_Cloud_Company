@@ -43,10 +43,19 @@ resource "null_resource" "wait_for_lb_ip" {
   }
 
   provisioner "local-exec" {
-    command = "chmod +x wait_for_lb_ip.sh"
+    command = <<-EOT
+      retries=0
+      max_retries=30
+      lb_public_ip=""
+      until [ "\$retries" -ge "\$max_retries" ]; do
+        lb_public_ip=\$(kubectl get services -n dev -o=jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+        [ -n "\$lb_public_ip" ] && break
+        retries=\$((retries+1))
+        sleep 10
+      done
+      [ -z "\$lb_public_ip" ] && echo "Error: Load Balancer IP not available after \$max_retries retries" && exit 1
+      echo "Load Balancer IP: \$lb_public_ip"
+    EOT
   }
-  provisioner "local-exec" {
-    command = "./wait_for_lb_ip.sh "
-  }
-
 }
+
