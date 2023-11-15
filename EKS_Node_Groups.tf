@@ -46,7 +46,7 @@ resource "null_resource" "wait_for_lb_ip" {
     command = "chmod +x wait_for_lb_ip.sh"
   }
   provisioner "local-exec" {
-    command = "./wait_for_lb_ip.sh"
+    command = "./wait_for_lb_ip.sh "
   }
 
 }
