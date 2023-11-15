@@ -1,5 +1,5 @@
 variable "current_region" {
-  value = data.aws_region.my_region.name
+  default = data.aws_region.my_region.name
 }
 variable "dev_web_eks_iam_role" {
   default = "dev_web_eks_iam_role"
