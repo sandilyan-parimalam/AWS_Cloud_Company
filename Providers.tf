@@ -23,3 +23,6 @@ provider "aws" {
 provider "kubernetes" {
   config_path = "~/.kube/config"
 }
+
+data "aws_region" "my_region" {}
+
