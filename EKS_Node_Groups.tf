@@ -32,7 +32,7 @@ resource "aws_eks_node_group" "dev_web_eks_node_group" {
 
 
   provisioner "local-exec" {
-    command = "kubectl apply -n dev -f K8_Manifests/Dev_Web_Manifest.yaml"
+    command = "~/kubectl apply -n dev -f K8_Manifests/Dev_Web_Manifest.yaml"
   }
 
 }
