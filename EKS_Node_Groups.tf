@@ -43,9 +43,10 @@ resource "null_resource" "wait_for_lb_ip" {
   }
 
   provisioner "local-exec" {
-    command = <<-EOT
-      chmod +x wait_for_lb_ip.sh
-      wait_for_lb_ip.sh
-    EOT
+    command = "chmod +x wait_for_lb_ip.sh"
   }
+  provisioner "local-exec" {
+    command = "./wait_for_lb_ip.sh"
+  }
+
 }
