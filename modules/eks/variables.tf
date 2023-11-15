@@ -1,3 +1,7 @@
+variable "my_current_region" {
+  type    = string
+  default = null
+}
 variable "dev_web_eks_iam_role" {
   default = "dev_web_eks_iam_role"
 }
