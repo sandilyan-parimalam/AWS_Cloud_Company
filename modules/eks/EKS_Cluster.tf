@@ -14,6 +14,6 @@ resource "aws_eks_cluster" "dev_web_eks_cluster" {
     aws_iam_role.dev_web_eks_iam_role,
   ]
   provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region ${var.region}"
+    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region module.vpc.dev_web_region"
   }
 }
