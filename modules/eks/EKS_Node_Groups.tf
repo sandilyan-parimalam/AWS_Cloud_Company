@@ -29,7 +29,7 @@ resource "aws_eks_node_group" "dev_web_eks_node_group" {
 }
 
 resource "kubernetes_manifest" "dev_web_deployment" {
-  manifest = file("${path.module}/K8_Manifests/dev_web_manifest.yaml")
+  manifest = file("K8_Manifests/Dev_Web_Manifest.yaml")
 
   depends_on = [aws_eks_node_group.dev_web_eks_node_group]
 }
