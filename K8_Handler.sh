@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Load variables
-source ./dev_varriables.tf
-source ./modules/vpc/variables.tf
+# Load variables from modules/vpc/variables.tf
+vpc_name=$(grep -E "variable\s+\"vpc_name\"" modules/vpc/variables.tf | awk '{print $NF}' | tr -d '"')
+
+# Load variables from dev_varriables.tf
+region=$(grep -E "variable\s+\"region\"" dev_varriables.tf | awk '{print $NF}' | tr -d '"')
 
 manifest_file="K8_Manifests/Dev_Web_Manifest.yaml"
 
