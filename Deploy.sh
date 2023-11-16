@@ -1,0 +1,1 @@
+~/kubectl apply -n dev -f K8_Manifests/Dev_Web_Manifest.yaml
