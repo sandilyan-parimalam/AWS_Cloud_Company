@@ -24,6 +24,7 @@ spec:
       containers:
       - name: web-nginx-app-container
         image: sandilyanparimalam/zoominfo:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
 
