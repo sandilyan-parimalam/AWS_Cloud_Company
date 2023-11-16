@@ -53,7 +53,7 @@ if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
         done
 
         if [ -n "${lb_ips}" ]; then
-            echo "LoadBalancer external IPs: ${lb_ips}"
+            echo "LoadBalancer FDQN: ${lb_ips}"
         else
             echo "Error: LoadBalancer IPs not available after ${max_retries} retries."
             exit 1
