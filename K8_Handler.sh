@@ -3,8 +3,18 @@
 # Load variables from modules/vpc/variables.tf
 vpc_name=$(grep -E "variable\s+\"vpc_name\"" modules/vpc/variables.tf | awk '{print $NF}' | tr -d '"')
 
+if [ -z "${vpc_name}" ]; then
+    echo "Error: Unable to get vpc_name from modules/vpc/variables.tf. Please check the file."
+    exit 1
+fi
+
 # Load variables from dev_varriables.tf
 region=$(grep -E "variable\s+\"region\"" dev_varriables.tf | awk '{print $NF}' | tr -d '"')
+
+if [ -z "${region}" ]; then
+    echo "Error: Unable to get region from dev_varriables.tf. Please check the file."
+    exit 1
+fi
 
 manifest_file="K8_Manifests/Dev_Web_Manifest.yaml"
 
@@ -16,7 +26,7 @@ fi
 NS=$(cat ${manifest_file} | grep "namespace:" | head -1 | cut -d ":" -f2)
 
 if [ -z "${NS}" ]; then
-    echo "Error: Unable to get the namespace from the manifest, Please check"
+    echo "Error: Unable to get the namespace from the manifest. Please check."
     exit 1
 fi
 
