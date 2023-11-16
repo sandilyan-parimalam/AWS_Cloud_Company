@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Load variables from modules/vpc/variables.tf
-vpc_name=$(grep -E "variable\s+\"vpc_name\"" modules/vpc/variables.tf | awk '{print $NF}' | tr -d '"')
+vpc_name=$(cat modules/vpc/variables.tf | sed '/^$/d' | grep -E -A 1 "variable\s+\"vpc_name\"" | tail -1 | cut -d '=' -f2 | sed 's#"##g')
 
 if [ -z "${vpc_name}" ]; then
     echo "Error: Unable to get vpc_name from modules/vpc/variables.tf. Please check the file."
     exit 1
 fi
 
-# Load variables from dev_varriables.tf
-region=$(grep -E "variable\s+\"region\"" dev_varriables.tf | awk '{print $NF}' | tr -d '"')
+# Load variables from dev_variables.tf
+region=$(awk -F' *= *' '/^variable *"region"/ {getline; while ($0 ~ /^[[:space:]]*$/) getline; gsub(/[" ]/, ""); print $2}' dev_variables.tf | tr -d '\r')
 
 if [ -z "${region}" ]; then
-    echo "Error: Unable to get region from dev_varriables.tf. Please check the file."
+    echo "Error: Unable to get region from dev_variables.tf. Please check the file."
     exit 1
 fi
 
