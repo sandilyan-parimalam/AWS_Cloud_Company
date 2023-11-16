@@ -13,6 +13,7 @@ if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
         lb_ips=""
 
         until [ ${retries} -ge ${max_retries} ]; do
+            echo "Try ${retries} - Waiting for LB to get Public IP..."
             lb_ips=$(~/kubectl get services -n dev -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[*].ip}')
             [ -n "${lb_ips}" ] && break
             retries=$((retries + 1))
