@@ -70,11 +70,12 @@ if [ "${ACTION}" = "destroy" ]; then
     vpc_id=$(aws ec2 describe-vpcs --region ${region} --filters "Name=tag:Name,Values=${vpc_name}" --query "Vpcs[*].VpcId" --output text)
 
     if [ -n "${vpc_id}" ]; then
-        echo "VPC ID: ${vpc_id}"
+
 
         ni_ids=$(aws ec2 describe-network-interfaces --region ${region} --filters "Name=vpc-id,Values=${vpc_id}" --query "NetworkInterfaces[*].NetworkInterfaceId" --output text)
 
         for ni_id in ${ni_ids}; do
+            echo "Detaching ${ni_id} ..."
             aws ec2 detach-network-interface --region ${region} --network-interface-id "${ni_id}"
             echo "Detached network interface: ${ni_id}"
         done
