@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "${ACTION}" == "Default_Apply" || "${ACTION}" == "apply" ]; then
+if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
     is_cluster_alive=$(~/kubectl get nodes 2>/dev/null)
     if [ "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Applying deployment..."
