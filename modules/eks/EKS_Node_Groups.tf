@@ -27,33 +27,3 @@ resource "aws_eks_node_group" "dev_web_eks_node_group" {
     aws_iam_role.dev_web_eks_node_iam_role,
   ]
 }
-
-resource "kubernetes_manifest" "dev_web_deployment" {
-  manifest = file("modules/eks/K8_Manifests/Dev_Web_Manifest.yaml")
-
-  depends_on = [aws_eks_node_group.dev_web_eks_node_group]
-}
-
-resource "null_resource" "wait_for_lb_ip" {
-  depends_on = [kubernetes_manifest.dev_web_deployment]
-
-  triggers = {
-    cluster_name = aws_eks_cluster.dev_web_eks_cluster.name
-  }
-
-  provisioner "local-exec" {
-    command = <<-EOT
-      retries=0
-      max_retries=30
-      lb_public_ip=""
-      until [ "\$retries" -ge "\$max_retries" ]; do
-        lb_public_ip=\$(~/kubectl get services -n dev -o=jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
-        [ -n "\$lb_public_ip" ] && break
-        retries=\$((retries+1))
-        sleep 10
-      done
-      [ -z "\$lb_public_ip" ] && echo "Error: Load Balancer IP not available after \$max_retries retries" && exit 1
-      echo "Load Balancer IP: \$lb_public_ip"
-    EOT
-  }
-}
