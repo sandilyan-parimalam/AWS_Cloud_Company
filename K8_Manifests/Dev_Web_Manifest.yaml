@@ -4,26 +4,6 @@ kind: Namespace
 metadata:
   name: dev
 
-# ConfigMap for custom HTML content
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nginx-html
-  namespace: dev
-data:
-  index.html: |
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Welcome to My Website</title>
-    </head>
-    <body>
-      <h1>Hello, welcome to my website!</h1>
-      <!-- Add your custom content here -->
-    </body>
-    </html>
-
 # Deployment
 ---
 apiVersion: apps/v1
@@ -46,17 +26,6 @@ spec:
         image: nginx:latest
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: nginx-html-volume
-          mountPath: /usr/share/nginx/html
-  volumeClaimTemplates:
-  - metadata:
-      name: nginx-html-volume
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
 
 # Service
 ---
