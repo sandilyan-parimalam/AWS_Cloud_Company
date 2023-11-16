@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load variables from modules/vpc/variables.tf
-vpc_name=$(cat modules/vpc/variables.tf | sed '/^$/d' | grep -E -A 1 "variable\s+\"vpc_name\"" | tail -1 | cut -d '=' -f2 | sed 's#"##g')
+vpc_name=$(grep -E "variable\s+\"vpc_name\"" modules/vpc/variables.tf | awk '/variable/ && /vpc_name/ {gsub(/"|{/, "", $NF); print $NF}')
 
 if [ -z "${vpc_name}" ]; then
     echo "Error: Unable to get vpc_name from modules/vpc/variables.tf. Please check the file."
@@ -9,7 +9,7 @@ if [ -z "${vpc_name}" ]; then
 fi
 
 # Load variables from dev_variables.tf
-region=$(awk -F' *= *' '/^variable *"region"/ {getline; while ($0 ~ /^[[:space:]]*$/) getline; gsub(/[" ]/, ""); print $2}' dev_variables.tf | tr -d '\r')
+region=$(grep -E "variable\s+\"region\"" dev_variables.tf | awk '/variable/ && /region/ {gsub(/"|{/, "", $NF); print $NF}')
 
 if [ -z "${region}" ]; then
     echo "Error: Unable to get region from dev_variables.tf. Please check the file."
@@ -64,17 +64,16 @@ if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
     fi
 fi
 
-if [ "${ACTION}" = "destroy" ]; then
+if [ "${ACTION}" == "destroy" ]; then
     # Check if the cluster is alive
     is_cluster_alive=$(kubectl get nodes 2>/dev/null)
     vpc_id=$(aws ec2 describe-vpcs --region ${region} --filters "Name=tag:Name,Values=${vpc_name}" --query "Vpcs[*].VpcId" --output text)
 
     if [ -n "${vpc_id}" ]; then
-
-
+        # Detach and delete network interfaces
         ni_info=$(aws ec2 describe-network-interfaces --region ${region} --filters "Name=vpc-id,Values=${vpc_id}" --query "NetworkInterfaces[*].[NetworkInterfaceId,Attachment.AttachmentId]" --output text)
 
-        for info in ${ni_ids}; do
+        for info in ${ni_info}; do
             ni_id=$(echo ${info} | cut -f1)
             attachment_id=$(echo ${info} | cut -f2)
             echo "Detaching ${ni_id} ..."
@@ -83,25 +82,30 @@ if [ "${ACTION}" = "destroy" ]; then
                 echo "Detached network interface: ${ni_id}"
             else
                 echo "Error: Attachment ID not found for ${ni_id}. Please check your configuration."
-            fi            
-            echo "Detached network interface: ${ni_id}"
+            fi
+        done
+
+        # Fetch all security groups associated with the VPC
+        sg_ids=$(aws ec2 describe-security-groups --region ${region} --filters "Name=vpc-id,Values=${vpc_id}" --query "SecurityGroups[*].GroupId" --output text)
+
+        # Delete each security group
+        for sg_id in ${sg_ids}; do
+            aws ec2 delete-security-group --region ${region} --group-id "${sg_id}"
+            echo "Deleted security group: ${sg_id}"
         done
     else
         echo "Error: VPC ID not found. Please check your VPC configuration."
     fi
-else
-    echo "Failed to delete deployment. Check the error message for details."
-    exit 1
-fi
-
 
     if [ -n "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Deleting deployment in namespace ${NS}..."
         # Attempt to delete the deployment
         if kubectl delete -n "${NS}" -f "${manifest_file}"; then
             echo "Deployment deleted successfully."
-
-            # Detach network interfaces associated with the VPC
+        else
+            echo "Failed to delete deployment. Check the error message for details."
+            exit 1
+        fi
     else
         echo "Cluster is not available, skipping deployment deletion"
     fi
