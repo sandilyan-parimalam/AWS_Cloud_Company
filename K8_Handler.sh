@@ -31,3 +31,13 @@ if [ "${ACTION}" = "apply" ]; then
     fi
 fi
 
+
+if [ "${ACTION}" = "destroy" ]; then
+    is_cluster_alive=$(~/kubectl get nodes 2>/dev/null)
+    if [ "${is_cluster_alive}" ]; then
+        echo "Cluster is alive. Deleting deployment..."
+        ~/kubectl delete -n dev -f K8_Manifests/Dev_Web_Manifest.yaml
+    else
+        echo "Cluster is not available, skipping deployment deletion"
+    fi
+fi
