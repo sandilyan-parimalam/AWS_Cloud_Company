@@ -81,6 +81,8 @@ if [ "${ACTION}" = "destroy" ]; then
             if [ -n "${attachment_id}" ]; then
                 aws ec2 detach-network-interface --region ${region} --attachment-id "${attachment_id}"
                 echo "Detached network interface: ${ni_id}"
+                echo "Delting network interface: ${ni_id}"
+                aws ec2 delete-network-interface --region ${region} --network-interface-id "${ni_id}"
             else
                 echo "Error: Attachment ID not found for ${ni_id}. Please check your configuration."
             fi            
