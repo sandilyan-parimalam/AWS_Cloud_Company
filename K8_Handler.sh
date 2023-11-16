@@ -72,11 +72,18 @@ if [ "${ACTION}" = "destroy" ]; then
     if [ -n "${vpc_id}" ]; then
 
 
-        ni_ids=$(aws ec2 describe-network-interfaces --region ${region} --filters "Name=vpc-id,Values=${vpc_id}" --query "NetworkInterfaces[*].NetworkInterfaceId" --output text)
+        ni_info=$(aws ec2 describe-network-interfaces --region ${region} --filters "Name=vpc-id,Values=${vpc_id}" --query "NetworkInterfaces[*].[NetworkInterfaceId,Attachment.AttachmentId]" --output text)
 
-        for ni_id in ${ni_ids}; do
+        for info in ${ni_ids}; do
+            ni_id=$(echo ${info} | cut -f1)
+            attachment_id=$(echo ${info} | cut -f2)
             echo "Detaching ${ni_id} ..."
-            aws ec2 detach-network-interface --region ${region} --network-interface-id "${ni_id}"
+            if [ -n "${attachment_id}" ]; then
+                aws ec2 detach-network-interface --region ${region} --attachment-id "${attachment_id}"
+                echo "Detached network interface: ${ni_id}"
+            else
+                echo "Error: Attachment ID not found for ${ni_id}. Please check your configuration."
+            fi            
             echo "Detached network interface: ${ni_id}"
         done
     else
