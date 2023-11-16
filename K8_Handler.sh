@@ -95,6 +95,17 @@ else
 fi
 
 
+# Fetch all security groups associated with the VPC
+sg_ids=$(aws ec2 describe-security-groups --region ${region} --filters "Name=vpc-id,Values=${vpc_id}" --query "SecurityGroups[*].GroupId" --output text)
+
+# Delete each security group
+for sg_id in ${sg_ids}; do
+    aws ec2 delete-security-group --region ${region} --group-id "${sg_id}"
+    echo "Deleted security group: ${sg_id}"
+done
+
+
+
     if [ -n "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Deleting deployment in namespace ${NS}..."
         # Attempt to delete the deployment
