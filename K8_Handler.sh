@@ -11,10 +11,10 @@ if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
         max_retries=30
         retries=0
         lb_ips=""
-
+        NS=$(cat K8_Manifests/Dev_Web_Manifest.yaml  | grep "namespace :" | cut -d ":" f2)
         until [ ${retries} -ge ${max_retries} ]; do
             echo "Try ${retries} out of ${max_retries} - Waiting for LB to get Public IP..."
-            lb_ips=$(~/kubectl get services -n dev -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[*].ip}')
+            lb_ips=$(/var/lib/jenkins/kubectl get -n ${NS} services -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[*].hostname}')
             [ -n "${lb_ips}" ] && break
             retries=$((retries + 1))
             sleep 10
