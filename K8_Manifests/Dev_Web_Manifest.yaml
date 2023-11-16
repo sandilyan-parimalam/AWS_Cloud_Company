@@ -23,7 +23,9 @@ spec:
     spec:
       containers:
       - name: web-nginx-app-container
-        image: nginx:latest
+        image: sandilyanparimalam/zoominfo:v1
+
+:latest
         ports:
         - containerPort: 80
 
