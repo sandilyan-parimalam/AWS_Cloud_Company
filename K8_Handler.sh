@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "${ACTION}" = "apply -auto-approve" ]; then
+if [ "${ACTION}" == "Default_Apply" || "${ACTION}" == "apply" ]; then
     is_cluster_alive=$(~/kubectl get nodes 2>/dev/null)
     if [ "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Applying deployment..."
@@ -32,7 +32,7 @@ if [ "${ACTION}" = "apply -auto-approve" ]; then
 fi
 
 
-if [ "${ACTION}" = "destroy -auto-approve" ]; then
+if [ "${ACTION}" = "destroy" ]; then
     is_cluster_alive=$(~/kubectl get nodes 2>/dev/null)
     if [ "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Deleting deployment..."
