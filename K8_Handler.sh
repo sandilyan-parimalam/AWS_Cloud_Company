@@ -31,14 +31,14 @@ if [ -z "${NS}" ]; then
 fi
 
 if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
-    is_cluster_alive=$(~/kubectl get nodes 2>/dev/null)
+    is_cluster_alive=$(kubectl get nodes 2>/dev/null)
     if [ "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Applying deployment..."
         if [ ! -f ${manifest_file} ]; then
             echo "Error: Unable to find the ${manifest_file}, please check.."
             exit 1
         fi
-        ~/kubectl apply -n ${NS} -f ${manifest_file}
+        kubectl apply -n ${NS} -f ${manifest_file}
 
         # Wait for all external IPs of LoadBalancer services
         max_retries=30
