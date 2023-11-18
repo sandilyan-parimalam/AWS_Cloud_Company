@@ -23,7 +23,7 @@ if [ ! -f ${manifest_file} ]; then
     exit 1
 fi
 
-NS=$(cat ${manifest_file} | grep "namespace:" | head -1 | cut -d ":" -f2)
+NS=$(cat ${manifest_file} | grep "namespace:" | head -1 | cut -d ":" -f2 | sed 's# ##g')
 
 if [ -z "${NS}" ]; then
     echo "Error: Unable to get the namespace from the manifest. Please check."
