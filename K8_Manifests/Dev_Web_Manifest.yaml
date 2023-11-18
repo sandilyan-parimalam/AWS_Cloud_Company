@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: web-nginx-app-container
-        image: sandilyanparimalam/testinfra:latest
+        image: sandilyanparimalam/testinfra
         imagePullPolicy: Always
         ports:
         - containerPort: 80
