@@ -31,14 +31,14 @@ if [ -z "${NS}" ]; then
 fi
 
 if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
-    is_cluster_alive=$(kubectl get nodes 2>/dev/null)
+    is_cluster_alive=$( get nodes 2>/dev/null)
     if [ "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Applying deployment..."
         if [ ! -f ${manifest_file} ]; then
             echo "Error: Unable to find the ${manifest_file}, please check.."
             exit 1
         fi
-        kubectl apply -n ${NS} -f ${manifest_file}
+         apply -n ${NS} -f ${manifest_file}
 
         # Wait for all external IPs of LoadBalancer services
         max_retries=30
@@ -46,7 +46,7 @@ if [ "${ACTION}" == "Default_Apply" ] || [ "${ACTION}" == "apply" ]; then
         lb_ips=""
         until [ ${retries} -ge ${max_retries} ]; do
             echo "Try ${retries} out of ${max_retries} - Waiting for LB to get FDQN from ${NS}..."
-            lb_ips=$(/var/lib/jenkins/kubectl get -n ${NS} services -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[*].hostname}')
+            lb_ips=$( get -n ${NS} services -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[*].hostname}')
             [ -n "${lb_ips}" ] && break
             retries=$((retries + 1))
             sleep 10
@@ -68,7 +68,7 @@ fi
 
 
 if [ "${ACTION}" = "destroy" ]; then
-    is_cluster_alive=$(kubectl get nodes 2>/dev/null)
+    is_cluster_alive=$( get nodes 2>/dev/null)
     vpc_id=$(aws ec2 describe-vpcs --region ${region} --filters "Name=tag:Name,Values=${vpc_name}" --query "Vpcs[*].VpcId" --output text)
 
     if [ -n "${vpc_id}" ]; then
@@ -105,7 +105,7 @@ if [ "${ACTION}" = "destroy" ]; then
     if [ -n "${is_cluster_alive}" ]; then
         echo "Cluster is alive. Deleting deployment in namespace ${NS}..."
         # Attempt to delete the deployment
-        if kubectl delete -n "${NS}" -f "${manifest_file}"; then
+        if  delete -n "${NS}" -f "${manifest_file}"; then
             echo "Deployment deleted successfully."
         else
             echo "Failed to delete deployment. Check the error message for details."
