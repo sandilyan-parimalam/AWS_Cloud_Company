@@ -1,9 +1,20 @@
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
 provider "kubernetes" {
-  host                   = aws_eks_cluster.dev_web_eks_cluster.endpoint
-  cluster_ca_certificate = base64decode(aws_eks_cluster.dev_web_eks_cluster.certificate_authority.0.data)
-  token                  = aws_eks_cluster_auth.dev_web_eks_cluster.token
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
   load_config_file       = false
 }
+
+
+
 
 resource "kubernetes_deployment" "example" {
   metadata {
