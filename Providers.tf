@@ -8,12 +8,6 @@ terraform {
       source = "hashicorp/kubernetes"
     }
   }
-  backend "s3" {
-    bucket = "terraformstatefilestore"
-    key    = "terraform.tfstate"
-    region = "us-east-1"
-  }
-
 }
 
 provider "aws" {
