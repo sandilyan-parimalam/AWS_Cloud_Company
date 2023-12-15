@@ -1,9 +1,8 @@
 provider "kubernetes" {
   host                   = aws_eks_cluster.dev_web_eks_cluster.endpoint
   cluster_ca_certificate = base64decode(aws_eks_cluster.dev_web_eks_cluster.certificate_authority.0.data)
-  token                  = aws_eks_cluster.dev_web_eks_cluster.token
+  token                  = aws_eks_cluster_auth.dev_web_eks_cluster.token
   load_config_file       = false
-  version                = "~> 1.11"
 }
 
 resource "kubernetes_deployment" "example" {
