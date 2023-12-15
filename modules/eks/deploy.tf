@@ -2,7 +2,6 @@ provider "kubernetes" {
   host                   = aws_eks_cluster.dev_web_eks_cluster.endpoint
   cluster_ca_certificate = aws_eks_cluster.dev_web_eks_cluster.certificate_authority.0.data
   token                  = aws_eks_cluster.dev_web_eks_cluster.identity.0.oidc.0.issuer
-  load_config_file       = false
 }
 
 
