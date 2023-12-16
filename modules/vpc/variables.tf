@@ -48,23 +48,27 @@ variable "security_group_description" {
   default = "Security Group for Dev Web environment"
 }
 
-variable "ssh_ingress_description" {
-  default = "all ssh traffic from internet"
+variable "http_ingress_description" {
+  default = "all http traffic from internet"
 }
 
-variable "ssh_ingress_from_port" {
-  default = "22"
+variable "http_ingress_description" {
+  default = "all http traffic from internet"
 }
 
-variable "ssh_ingress_to_port" {
-  default = "22"
+variable "http_ingress_from_port" {
+  default = "80"
 }
 
-variable "ssh_ingress_protocol" {
+variable "http_ingress_to_port" {
+  default = "80"
+}
+
+variable "http_ingress_protocol" {
   default = "tcp"
 }
 
-variable "ssh_ingress_cidr_blocks" {
+variable "http_ingress_cidr_blocks" {
   default = ["0.0.0.0/0"]
 }
 

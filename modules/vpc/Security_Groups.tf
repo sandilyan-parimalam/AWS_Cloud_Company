@@ -4,11 +4,11 @@ resource "aws_security_group" "dev_web_sg" {
   vpc_id      = aws_vpc.dev_vpc.id
 
   ingress {
-    description = var.ssh_ingress_description
-    from_port   = var.ssh_ingress_from_port
-    to_port     = var.ssh_ingress_to_port
-    protocol    = var.ssh_ingress_protocol
-    cidr_blocks = var.ssh_ingress_cidr_blocks
+    description = var.http_ingress_description
+    from_port   = var.http_ingress_from_port
+    to_port     = var.http_ingress_to_port
+    protocol    = var.http_ingress_protocol
+    cidr_blocks = var.http_ingress_cidr_blocks
   }
 
   tags = {
