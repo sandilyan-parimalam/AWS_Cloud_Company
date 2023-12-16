@@ -1,11 +1,53 @@
-locals {
-  yaml_content = file("K8_Manifests/Dev_Web_Manifest.yaml")
-  yaml_decoded  = jsondecode(local.yaml_content)
+resource "kubernetes_deployment" "nginx_deployment" {
+  metadata {
+    name = "nginx-deployment"
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "nginx"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "nginx"
+        }
+      }
+
+      spec {
+        container {
+          name  = "nginx"
+          image = "nginx:latest"
+          port {
+            container_port = 80
+          }
+        }
+      }
+    }
+  }
 }
 
-resource "kubernetes_manifest" "dev_web_manifest" {
-  manifest = local.yaml_decoded
+resource "kubernetes_service" "nginx_service" {
+  metadata {
+    name = "nginx-service"
+  }
 
-  # Apply the manifest only when the workspace is "AWS_Cloud_Company"
-  count = terraform.workspace == "AWS_Cloud_Company" ? 1 : 0
+  spec {
+    selector = {
+      app = "nginx"
+    }
+
+    port {
+      protocol   = "TCP"
+      port       = 80
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
 }
