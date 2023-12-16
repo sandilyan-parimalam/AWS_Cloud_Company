@@ -53,5 +53,5 @@ resource "kubernetes_service" "nginx_service" {
 }
 
 output "load_balancer_spec" {
-  value = kubernetes_service.nginx_service.metadata
+  value = kubernetes_service.nginx_service.load_balancer_ingress[0].ip
 }
