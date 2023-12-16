@@ -2,7 +2,7 @@
 resource "kubernetes_service" "dev_web_lb" {
   metadata {
     name      = "dev-web-lb"
-    namespace = kubernetes_namespace.dev.metadata[0].name
+    namespace = kubernetes_namespace.development.metadata[0].name
   }
 
   spec {

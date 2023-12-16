@@ -1,7 +1,7 @@
 # Namespace
 resource "kubernetes_namespace" "dev" {
   metadata {
-    name = "dev"
+    name = "development"
   }
 }
 
@@ -9,7 +9,7 @@ resource "kubernetes_namespace" "dev" {
 resource "kubernetes_deployment" "dev_web_deployment" {
   metadata {
     name      = "dev-web-deployment"
-    namespace = kubernetes_namespace.dev.metadata[0].name
+    namespace = kubernetes_namespace.development.metadata[0].name
   }
 
   spec {
