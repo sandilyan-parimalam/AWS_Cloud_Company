@@ -14,6 +14,7 @@ resource "kubernetes_service" "dev_web_lb" {
 
     port {
       protocol    = "TCP"
+      node_port = 80 
       port        = 80
       target_port = 80
     }
