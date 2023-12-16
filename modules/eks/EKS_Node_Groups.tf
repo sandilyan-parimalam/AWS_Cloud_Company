@@ -31,9 +31,9 @@ resource "aws_eks_node_group" "dev_web_eks_node_group" {
   }
   provisioner "local-exec" {
     command = <<EOT
-      if [ "${terraform.lifecycle}" == "apply" ]; then
+      if [ "${terraform.workspace}" == "default" ]; then
         kubectl apply -f K8_Manifests/Dev_Web_Manifest.yaml
-      elif [ "${terraform.lifecycle}" == "destroy" ]
+      else [ "${terraform.lifecycle}" == "destroy" ]
         kubectl delete -f K8_Manifests/Dev_Web_Manifest.yaml
       fi
     EOT
