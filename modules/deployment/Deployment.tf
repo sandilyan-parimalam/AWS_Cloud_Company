@@ -1,5 +1,5 @@
 # Namespace
-resource "kubernetes_namespace" "dev" {
+resource "kubernetes_namespace" "development" {
   metadata {
     name = "development"
   }
