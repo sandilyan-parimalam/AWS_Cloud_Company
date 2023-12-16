@@ -53,5 +53,5 @@ resource "kubernetes_service" "nginx_service" {
 }
 
 output "load_balancer_spec" {
-  value = kubernetes_service.nginx_service.spec
+  value = kubernetes_service.nginx_service.metadata
 }
