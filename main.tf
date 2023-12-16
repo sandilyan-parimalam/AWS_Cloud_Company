@@ -10,3 +10,8 @@ module "eks" {
   source = "./modules/eks"
   region = var.region
 }
+
+module "deployment" {
+  source = "./modules/deployment"
+  
+}
