@@ -52,10 +52,6 @@ variable "http_ingress_description" {
   default = "all http traffic from internet"
 }
 
-variable "http_ingress_description" {
-  default = "all http traffic from internet"
-}
-
 variable "http_ingress_from_port" {
   default = "80"
 }
