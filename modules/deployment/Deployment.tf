@@ -1,44 +1,6 @@
-# Namespace
-resource "kubernetes_namespace" "development" {
-  metadata {
-    name = "development"
-  }
-}
+resource "kubernetes_manifest" "dev_web_manifest" {
+  manifest = file("K8_Manifests/Dev_Web_Manifest.yaml")
 
-# Deployment
-resource "kubernetes_deployment" "dev_web_deployment" {
-  metadata {
-    name      = "dev-web-deployment"
-    namespace = kubernetes_namespace.development.metadata[0].name
-  }
-
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        app = "web-nginx-app"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "web-nginx-app"
-        }
-      }
-
-      spec {
-        container {
-          name  = "web-nginx-app-container"
-          image = "sandilyanparimalam/testinfra"
-          # imagePullPolicy = "Always" # Uncomment if needed
-          
-          port {
-            container_port = 80
-          }
-        }
-      }
-    }
-  }
+  # Apply the manifest only when the workspace is "AWS_Cloud_Company"
+  count = terraform.workspace == "AWS_Cloud_Company" ? 1 : 0
 }

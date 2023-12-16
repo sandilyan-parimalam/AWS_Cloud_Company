@@ -26,17 +26,4 @@ resource "aws_eks_node_group" "dev_web_eks_node_group" {
   depends_on = [
     aws_iam_role.dev_web_eks_node_iam_role,
   ]
-  provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --name ${var.dev_web_eks_cluster} --region ${var.region}"
-  }
-  provisioner "local-exec" {
-    command = <<EOT
-      if [ "${terraform.workspace}" == "default" ]; then
-        kubectl apply -f K8_Manifests/Dev_Web_Manifest.yaml
-      else
-        kubectl delete -f K8_Manifests/Dev_Web_Manifest.yaml
-      fi
-    EOT
-  }
-
 }
