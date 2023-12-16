@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "nginx_deployment" {
       spec {
         container {
           name  = "nginx"
-          image = "nginx:latest"
+          image = "sandilyanparimalam/testinfra"
           port {
             container_port = 80
           }
