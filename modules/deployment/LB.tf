@@ -1,22 +1,21 @@
-resource "kubernetes_service" "example" {
+# Service
+resource "kubernetes_service" "dev_web_lb" {
   metadata {
-    name = "terraform-example"
-    labels = {
-      app = "MyExampleApp"
-    }
+    name      = "dev-web-lb"
+    namespace = kubernetes_namespace.dev.metadata[0].name
   }
 
   spec {
+    type = "LoadBalancer"
+
     selector = {
-      app = "MyExampleApp"
+      app = "web-nginx-app"
     }
 
     port {
-      protocol   = "TCP"
-      port       = 80
+      protocol    = "TCP"
+      port        = 80
       target_port = 80
     }
-
-    type = "LoadBalancer"
   }
 }
