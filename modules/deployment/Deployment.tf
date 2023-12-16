@@ -53,5 +53,7 @@ resource "kubernetes_service" "nginx_service" {
 }
 
 output "load_balancer_spec" {
-  value = try(kubernetes_service.nginx_service.load_balancer[0].ingress[0].ip, "Load balancer IP not available")
-}
+  value = try(
+    kubernetes_service.nginx_service.status[0].load_balancer.ingress[0].ip,
+    "Load balancer IP not available"
+  )}
