@@ -15,5 +15,5 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  host = module.eks.cluster_enpoint
 }
